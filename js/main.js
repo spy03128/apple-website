@@ -1,7 +1,7 @@
 (() => {
-
   let yOffset = 0; //window.pageYoffset 대신 사용할 변수
-
+  let prevScrollHeight = 0; //현재 스크롤 위치 보다 이전에 위치한 스크롤 섹션들의 스크롤 높이값의 합
+  let currentScene = 0; //현재 활성화된(보고있는) scene(scrollsection)
 
   const sceneInfo = [
     {
@@ -52,16 +52,28 @@
     }
   }
 
-  function scrollLoop(){
-     
+  function scrollLoop() {
+    prevScrollHeight = 0;
+    for (let i = 0; i < currentScene; i++) {
+      prevScrollHeight = prevScrollHeight + sceneInfo[i].scrollHeight;
+    }
+
+    if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+      currentScene++;
+    }
+
+    if (yOffset < prevScrollHeight) {
+      if (currentScene === 0) return;
+      currentScene--;
+    }
+    console.log(currentScene);
   }
 
   window.addEventListener("resize", setLayout);
-  window.addEventListener("scroll", () =>{
+  window.addEventListener("scroll", () => {
     yOffset = window.pageYOffset;
     scrollLoop();
-  }));
-
+  });
 
   setLayout();
 })();
