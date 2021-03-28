@@ -50,6 +50,21 @@
         i
       ].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
     }
+    yOffset = window.pageYOffset;
+    //현재 씬을 자동으로 세팅
+    let totalScrollHeight = 0;
+    for (let i = 0; i < sceneInfo.length; i++) {
+      totalScrollHeight = totalScrollHeight + sceneInfo[i].scrollHeight;
+      //현재 y축 위치와 tatal높이를 비교해서 현재 창의 scene번호 지정
+
+      if (totalScrollHeight >= yOffset) {
+        currentScene = i;
+        break;
+      }
+    }
+
+    //setAttribute는 선택한 요소의 속상값을 정하는 것
+    document.body.setAttribute("id", `show-scene-${currentScene}`);
   }
 
   function scrollLoop() {
@@ -58,22 +73,25 @@
       prevScrollHeight = prevScrollHeight + sceneInfo[i].scrollHeight;
     }
 
+    //현재 스크롤값이 이전 섹션 스크롤 값의 합 + 현재 섹션 스크롤값 보다 크면
     if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
-      currentScene++;
+      currentScene++; //현재 섹션 번호를 1 증가
     }
 
+    //현재 스크롤값이 이전 섹션 스크롤 값의 합보다 작으면
     if (yOffset < prevScrollHeight) {
       if (currentScene === 0) return;
-      currentScene--;
+      currentScene--; //현재 섹션 번호를 1 감소
     }
-    console.log(currentScene);
+
+    //setAttribute는 선택한 요소의 속상값을 정하는 것
+    document.body.setAttribute("id", `show-scene-${currentScene}`);
   }
 
-  window.addEventListener("resize", setLayout);
+  window.addEventListener("resize", setLayout); //윈도우 창을 줄였을때 레이아웃 재설정
+  window.addEventListener("load", setLayout); //리소스가 다 로드 된다음 setLayout 함수 호출
   window.addEventListener("scroll", () => {
     yOffset = window.pageYOffset;
     scrollLoop();
   });
-
-  setLayout();
 })();
