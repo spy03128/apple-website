@@ -106,6 +106,15 @@ a {
   font-size: 3.5rem;
 }
 
+#scroll-section-2 .b {
+  top: 10%;
+  left: 40%;
+}
+#scroll-section-2 .c {
+  top: 15%;
+  left: 45%;
+}
+
 .desc-message {
   width: 50%;
   font-weight: bold;
@@ -171,6 +180,14 @@ a {
   }
   #scroll-section-2 .main-message {
     font-size: 6vw;
+  }
+
+  #scroll-section-2 .b {
+    top: 20%;
+    left: 53%;
+  }
+  #scroll-section-2 .c {
+    left: 55%;
   }
   .main-message small {
     font-size: 1.5vw;
