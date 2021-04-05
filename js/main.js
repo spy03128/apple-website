@@ -17,9 +17,14 @@
         messageB: document.querySelector("#scroll-section-0 .main-message.b"),
         messageC: document.querySelector("#scroll-section-0 .main-message.c"),
         messageD: document.querySelector("#scroll-section-0 .main-message.d"),
+        canvas: document.querySelector("#video-canvas-0"),
+        context: document.querySelector("#video-canvas-0").getContext("2d"),
+        videoImages: [],
       },
       values: {
         //값에 해당하는 요소
+        videoImageCount: 300,
+        imageSequence: [0, 299],
         messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
         messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
         messageC_opacity_in: [0, 1, { start: 0.5, end: 0.6 }],
@@ -89,6 +94,16 @@
       values: {},
     },
   ];
+
+  function setCanvasImages() {
+    let imgElem;
+    for (let i = 0; i < sceneInfo[0].values.videoImageCount; i++) {
+      imgElem = document.createElement("img");
+      imgElem.src = `./video/001/IMG_${6726 + i}.JPG`;
+      sceneInfo[0].objs.videoImages.push(imgElem);
+    }
+  }
+  setCanvasImages();
 
   function setLayout() {
     //각 스크롤 section 의 높이 세팅c
@@ -160,6 +175,11 @@
 
     switch (currentScene) {
       case 0:
+        let sequence = Math.round(
+          calcValues(values.imageSequence, currentYOffset)
+        );
+        objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+        console.log(sequence);
         if (scrollRatio <= 0.22) {
           //in
           objs.messageA.style.opacity = calcValues(
