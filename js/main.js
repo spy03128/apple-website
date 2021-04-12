@@ -133,6 +133,9 @@
 
     //setAttribute는 선택한 요소의 속상값을 정하는 것
     document.body.setAttribute("id", `show-scene-${currentScene}`);
+
+    const heightRatio = window.innerHeight / 1080;
+    sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
   }
 
   function calcValues(values, currentYOffset) {
