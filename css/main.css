@@ -63,12 +63,14 @@ a {
 
 .scroll-section {
   padding-top: 50vh;
-  border: 3px solid red;
 }
 
 #scroll-section-0 h1 {
   font-size: 4rem;
   text-align: center;
+  position: relative;
+  z-index: 5;
+  top: -10vh;
 }
 .main-message {
   display: flex;
