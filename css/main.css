@@ -179,6 +179,12 @@ a {
 .image-blend-canvas {
   background: red;
 }
+
+.image-blend-canvas.sticky {
+  top: 0;
+  position: fixed;
+}
+
 #scroll-section-3 {
   display: flex;
   flex-direction: column;
