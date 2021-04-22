@@ -112,6 +112,8 @@
         rectStartY: 0,
         blendHeight: [0, 0, { start: 0, end: 0 }],
         canvas_scale: [0, 0, { start: 0, end: 0 }],
+        canvasCaption_opacity: [0, 1, { start: 0, end: 0 }],
+        canvasCaption_translateY: [20, 0, { start: 0, end: 0 }],
       },
     },
   ];
@@ -139,6 +141,14 @@
     }
   }
   setCanvasImages();
+
+  function checkMenu() {
+    if (yOffset > 44) {
+      document.body.classList.add("local-nav-sticky");
+    } else {
+      document.body.classList.remove("local-nav-sticky");
+    }
+  }
 
   function setLayout() {
     //각 스크롤 section 의 높이 세팅c
@@ -562,7 +572,7 @@
             -(objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2
           }px`;
 
-          if (scrollHeight > values.blendHeight[2].end) {
+          if (scrollRatio > values.blendHeight[2].end) {
             values.canvas_scale[0] = canvasScaleRatio;
             values.canvas_scale[1] =
               document.body.offsetWidth / (objs.canvas.width * 1.5);
@@ -573,10 +583,33 @@
               values.canvas_scale,
               currentYOffset
             )})`;
+            objs.canvas.style.marginTop = 0;
           }
 
-          // if(){
-          //   step=3;
+          if (
+            scrollRatio > values.canvas_scale[2].end &&
+            values.canvas_scale[2].end > 0
+          ) {
+            objs.canvas.classList.remove("sticky");
+            objs.canvas.style.marginTop = `${scrollHeight * 0.4}px`;
+
+            values.canvasCaption_opacity[2].start = values.canvas_scale[2].end;
+            values.canvasCaption_opacity[2].end =
+              values.canvasCaption_opacity[2].start + 0.1;
+            values.canvasCaption_translateY[2].start =
+              values.canvas_scale[2].end;
+            values.canvasCaption_translateY[2].end =
+              values.canvasCaption_translateY[2].start + 0.1;
+
+            objs.canvasCaption.style.opacity = calcValues(
+              values.canvasCaption_opacity,
+              currentYOffset
+            );
+            objs.canvasCaption.style.transform = `translate3d(0, ${calcValues(
+              values.canvasCaption_translateY,
+              currentYOffset
+            )}%, 0)`;
+          }
         }
 
         break;
@@ -621,5 +654,6 @@
   window.addEventListener("scroll", () => {
     yOffset = window.pageYOffset;
     scrollLoop();
+    checkMenu();
   });
 })();

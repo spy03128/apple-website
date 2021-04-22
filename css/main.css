@@ -61,6 +61,13 @@ a {
   font-weight: bold;
 }
 
+.local-nav-sticky .local-nav {
+  position: fixed;
+  top: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: saturate(180%) blur(15px);
+}
+
 .scroll-section {
   position: relative;
   padding-top: 50vh;
@@ -89,7 +96,7 @@ a {
 }
 
 .description {
-  padding: 0 1rem;
+  padding: 0;
   font-size: 1.2rem;
   color: #888;
   max-width: 1000px;
@@ -133,21 +140,21 @@ a {
 }
 
 .mid-message {
-  padding: 0 1rem;
+  padding: 0;
   font-size: 2rem;
   color: #888;
-  max-width: 1000px;
+  width: 1000px;
   margin: 0 auto;
 }
 .mid-message strong {
   color: rgb(29, 29, 31);
 }
 .canvas-caption {
-  padding: 0 1rem;
+  padding: 0;
   color: #888;
   font-size: 1.2rem;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: -8em auto 0;
 }
 .footer {
   display: flex;
