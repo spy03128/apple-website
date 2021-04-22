@@ -111,6 +111,7 @@
         rect2X: [0, 0, { start: 0, end: 0 }],
         rectStartY: 0,
         blendHeight: [0, 0, { start: 0, end: 0 }],
+        canvas_scale: [0, 0, { start: 0, end: 0 }],
       },
     },
   ];
@@ -560,6 +561,20 @@
           objs.canvas.style.top = `${
             -(objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2
           }px`;
+
+          if (scrollHeight > values.blendHeight[2].end) {
+            values.canvas_scale[0] = canvasScaleRatio;
+            values.canvas_scale[1] =
+              document.body.offsetWidth / (objs.canvas.width * 1.5);
+            values.canvas_scale[2].start = values.blendHeight[2].end;
+            values.canvas_scale[2].end = values.canvas_scale[2].start + 0.2;
+
+            objs.canvas.style.transform = `scale(${calcValues(
+              values.canvas_scale,
+              currentYOffset
+            )})`;
+          }
+
           // if(){
           //   step=3;
         }
