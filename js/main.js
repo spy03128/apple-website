@@ -676,29 +676,36 @@
       rafState = false;
     }
   }
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 600) {
-      setLayout();
-    }
-    sceneInfo[3].values.rectStartY = 0;
-  }); //윈도우 창을 줄였을때 레이아웃 재설정
-  window.addEventListener("orientationchange", setLayout); //모바일 기기 방향을 바꿀때마다 나타나는 이벤트
+
   window.addEventListener("load", () => {
     document.body.classList.remove("before-load");
     setLayout();
     sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
-  }); //리소스가 다 로드 된다음 setLayout 함수 호출
-  document.querySelector(".loading").addEventListener("transitionend", (e) => {
-    document.body.removeChild(e.currentTarget);
-  });
-  window.addEventListener("scroll", () => {
-    yOffset = window.pageYOffset;
-    scrollLoop();
-    checkMenu();
 
-    if (!rafState) {
-      rafId = requestAnimationFrame(loop);
-      rafState = true;
-    }
-  });
+    window.addEventListener("scroll", () => {
+      yOffset = window.pageYOffset;
+      scrollLoop();
+      checkMenu();
+
+      if (!rafState) {
+        rafId = requestAnimationFrame(loop);
+        rafState = true;
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 600) {
+        setLayout();
+      }
+      sceneInfo[3].values.rectStartY = 0;
+    }); //윈도우 창을 줄였을때 레이아웃 재설정
+
+    window.addEventListener("orientationchange", setLayout); //모바일 기기 방향을 바꿀때마다 나타나는 이벤트
+
+    document
+      .querySelector(".loading")
+      .addEventListener("transitionend", (e) => {
+        document.body.removeChild(e.currentTarget);
+      });
+  }); //리소스가 다 로드 된다음 setLayout 함수 호출
 })();

@@ -16,6 +16,14 @@ a {
   text-decoration: none;
 }
 
+body.before-load {
+  overflow: hidden;
+}
+
+.before-load .loading {
+  opacity: 1;
+}
+
 .loading {
   display: flex;
   align-items: center;
@@ -29,10 +37,6 @@ a {
   background-color: white;
   transition: 0.5s;
   opacity: 0;
-}
-
-.before-load .loading {
-  opacity: 1;
 }
 
 @keyframes loading-spin {
