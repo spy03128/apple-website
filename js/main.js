@@ -3,6 +3,10 @@
   let prevScrollHeight = 0; //현재 스크롤 위치 보다 이전에 위치한 스크롤 섹션들의 스크롤 높이값의 합
   let currentScene = 0; //현재 활성화된(보고있는) scene(scrollsection)
   let enterNewScene = false; //새로운 씬이 시작되는 순간 true
+  let acc = 0.1;
+  let delayedYOffset = 0;
+  let rafId;
+  let rafState;
 
   const sceneInfo = [
     {
@@ -224,10 +228,10 @@
 
     switch (currentScene) {
       case 0:
-        let sequence = Math.round(
-          calcValues(values.imageSequence, currentYOffset)
-        );
-        objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+        // let sequence = Math.round(
+        //   calcValues(values.imageSequence, currentYOffset)
+        // );
+        // objs.context.drawImage(objs.videoImages[sequence], 0, 0);
         objs.canvas.style.opacity = calcValues(
           values.canvas_opacity,
           currentYOffset
@@ -329,10 +333,11 @@
       case 1:
         break;
       case 2:
-        let sequence2 = Math.round(
-          calcValues(values.imageSequence, currentYOffset)
-        );
-        objs.context.drawImage(objs.videoImages[sequence2], 0, 0);
+        // let sequence2 = Math.round(
+        //   calcValues(values.imageSequence, currentYOffset)
+        // );
+        // objs.context.drawImage(objs.videoImages[sequence2], 0, 0);
+
         if (scrollRatio <= 0.5) {
           objs.canvas.style.opacity = calcValues(
             values.canvas_opacity_in,
@@ -617,14 +622,17 @@
   }
 
   function scrollLoop() {
-    enterNewScene = false;
+    enterNewScene = false; //씬이 바뀌는 순간에 플레이애니메이션 실행 패스
     prevScrollHeight = 0;
     for (let i = 0; i < currentScene; i++) {
       prevScrollHeight = prevScrollHeight + sceneInfo[i].scrollHeight;
     }
 
     //현재 스크롤값이 이전 섹션 스크롤 값의 합 + 현재 섹션 스크롤값 보다 크면
-    if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+    if (
+      delayedYOffset >
+      prevScrollHeight + sceneInfo[currentScene].scrollHeight
+    ) {
       enterNewScene = true;
       currentScene++; //현재 섹션 번호를 1 증가
       //setAttribute는 선택한 요소의 속상값을 정하는 것
@@ -632,7 +640,7 @@
     }
 
     //현재 스크롤값이 이전 섹션 스크롤 값의 합보다 작으면
-    if (yOffset < prevScrollHeight) {
+    if (delayedYOffset < prevScrollHeight) {
       enterNewScene = true;
 
       if (currentScene === 0) return;
@@ -646,7 +654,35 @@
     playAnimation();
   }
 
-  window.addEventListener("resize", setLayout); //윈도우 창을 줄였을때 레이아웃 재설정
+  function loop() {
+    delayedYOffset = delayedYOffset + (yOffset - delayedYOffset) * acc;
+    if (!enterNewScene) {
+      if (currentScene === 0 || currentScene === 2) {
+        const currentYOffset = delayedYOffset - prevScrollHeight;
+        const objs = sceneInfo[currentScene].objs;
+        const values = sceneInfo[currentScene].values;
+        let sequence = Math.round(
+          calcValues(values.imageSequence, currentYOffset)
+        );
+        if (objs.videoImages[sequence]) {
+          objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+        }
+      }
+    }
+    rafId = requestAnimationFrame(loop);
+
+    if (Math.abs(yOffset - delayedYOffset) < 1) {
+      cancelAnimationFrame(rafId);
+      rafState = false;
+    }
+  }
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 600) {
+      setLayout();
+    }
+    sceneInfo[3].values.rectStartY = 0;
+  }); //윈도우 창을 줄였을때 레이아웃 재설정
+  window.addEventListener("orientationchange", setLayout); //모바일 기기 방향을 바꿀때마다 나타나는 이벤트
   window.addEventListener("load", () => {
     setLayout();
     sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
@@ -655,5 +691,10 @@
     yOffset = window.pageYOffset;
     scrollLoop();
     checkMenu();
+
+    if (!rafState) {
+      rafId = requestAnimationFrame(loop);
+      rafState = true;
+    }
   });
 })();
