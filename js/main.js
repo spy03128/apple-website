@@ -628,13 +628,27 @@
       prevScrollHeight = prevScrollHeight + sceneInfo[i].scrollHeight;
     }
 
+    //현재 스크롤값이 이전 섹션 스크롤 값의 합 + 현재 섹션 스크롤값 보다 작으면 (스크롤 애니메이션 범위)
+    if (
+      delayedYOffset <
+      prevScrollHeight + sceneInfo[currentScene].scrollHeight
+    ) {
+      document.body.classList.remove("scroll-effect-end");
+    }
+
     //현재 스크롤값이 이전 섹션 스크롤 값의 합 + 현재 섹션 스크롤값 보다 크면
     if (
       delayedYOffset >
       prevScrollHeight + sceneInfo[currentScene].scrollHeight
     ) {
       enterNewScene = true;
-      currentScene++; //현재 섹션 번호를 1 증가
+      if (currentScene === sceneInfo.length - 1) {
+        document.body.classList.add("scroll-effect-end");
+      }
+
+      if (currentScene < sceneInfo.length - 1) {
+        currentScene++; //현재 섹션 번호를 1 증가
+      }
       //setAttribute는 선택한 요소의 속상값을 정하는 것
       document.body.setAttribute("id", `show-scene-${currentScene}`);
     }
@@ -710,13 +724,15 @@
 
     window.addEventListener("resize", () => {
       if (window.innerWidth > 900) {
-        setLayout();
-        sceneInfo[3].values.rectStartY = 0;
+        window.location.reload();
       }
     }); //윈도우 창을 줄였을때 레이아웃 재설정
 
     window.addEventListener("orientationchange", () => {
-      setTimeout(setLayout, 500);
+      scrollTo(0, 0);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }); //모바일 기기 방향을 바꿀때마다 나타나는 이벤트
 
     document

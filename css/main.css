@@ -276,6 +276,14 @@ body.before-load {
   will-change: transform, opacity;
 }
 
+.scroll-effect-end .sticky-elem {
+  display: none !important;
+}
+
+.normal-cotent {
+  margin-bottom: 10rem;
+}
+
 @media (min-width: 1024px) {
   #scroll-section-0 h1 {
     font-size: 9vw;
