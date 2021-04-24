@@ -694,13 +694,15 @@
     });
 
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 600) {
+      if (window.innerWidth > 900) {
         setLayout();
+        sceneInfo[3].values.rectStartY = 0;
       }
-      sceneInfo[3].values.rectStartY = 0;
     }); //윈도우 창을 줄였을때 레이아웃 재설정
 
-    window.addEventListener("orientationchange", setLayout); //모바일 기기 방향을 바꿀때마다 나타나는 이벤트
+    window.addEventListener("orientationchange", () => {
+      setTimeout(setLayout, 500);
+    }); //모바일 기기 방향을 바꿀때마다 나타나는 이벤트
 
     document
       .querySelector(".loading")
